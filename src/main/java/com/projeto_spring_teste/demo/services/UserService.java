@@ -2,8 +2,11 @@ package com.projeto_spring_teste.demo.services;
 
 import com.projeto_spring_teste.demo.entities.User;
 import com.projeto_spring_teste.demo.repositories.UserRepository;
-import com.projeto_spring_teste.demo.services.exeptions.ResourceNotFoundException;
+import com.projeto_spring_teste.demo.services.exceptions.DatabaseExeception;
+import com.projeto_spring_teste.demo.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +27,13 @@ public class UserService {
         return repository.save(obj);
     }
     public void delete(Long id) {
-        repository.deleteById(id);
+        try{
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseExeception(e.getMessage());
+        }
     }
     public User update(Long id, User obj){
         User entity = repository.getReferenceById(id);

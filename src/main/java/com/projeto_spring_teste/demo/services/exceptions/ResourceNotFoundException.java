@@ -1,4 +1,4 @@
-package com.projeto_spring_teste.demo.services.exeptions;
+package com.projeto_spring_teste.demo.services.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
     private static final long serialVersionUID = 1L;
